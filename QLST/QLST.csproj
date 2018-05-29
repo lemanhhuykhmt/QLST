@@ -54,6 +54,13 @@
     <Compile Include="Control\NhanVienControl.cs" />
     <Compile Include="Control\SanPhamControl.cs" />
     <Compile Include="ExtendModel\DataProvider.cs" />
+    <Compile Include="Model\ChiTietHDB.cs" />
+    <Compile Include="Model\HoaDonBan.cs" />
+    <Compile Include="Model\KhuyenMai.cs" />
+    <Compile Include="Model\LoaiSP.cs" />
+    <Compile Include="Model\MatHang.cs" />
+    <Compile Include="Model\NhanVien.cs" />
+    <Compile Include="Model\SanPham.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
