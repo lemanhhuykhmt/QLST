@@ -21,7 +21,12 @@ namespace QLST.Controls
             DataTable dt = DataProvider.Instance.ExecuteQuery(query);
             return dt;
         }
-       
+        public static DataTable layThongTin(int id) // lấy thông tin khách hàng có id là ..
+        {
+            string query = "select * from NhaPhanPhoi where MaNPP = @manpp";//lấy ra thông tin khách hàng có mã
+            DataTable dt = DataProvider.Instance.ExecuteQuery(query, new object[] { id });
+            return dt;
+        }
         public static int suaThongTin(int id, string ten, string diachi, string sdt) // sửa thông tin của khách hàng
         {
             string query = "exec suanpp @id , @ten , @diachi , @sdt";
