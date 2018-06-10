@@ -10,11 +10,7 @@ namespace QLST.Controls
 {
     class SanPhamControl
     {
-        public static int themDuLieu(string ten, int loai, double dongia, string donvido, string hsd, string nsx, int soluong)
-        {
-            string query = "exec themsp @tensp , @loaisp , @dongia , @donvido , @hsd , @nsx , @soluong";
-            return DataProvider.Instance.ExecuteNonQuery(query, new object[] { ten, loai, dongia, donvido, hsd, nsx, soluong});
-        }
+       
         public static DataTable layDanhSach() // lấy danh sách sản phẩm
         {
             string query = "select sp.MaSP, sp.TenSP, loai.TenLoaiSP, sp.DonGia, " 
