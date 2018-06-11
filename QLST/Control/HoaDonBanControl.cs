@@ -28,9 +28,9 @@ namespace QLST.Controls
         public static DataTable layDanhSach()  // lấy ra danh sách hóa đơn có tên nv, tên kh
         {
             string query = "select b.MaHDB, b.TenNV, b.TenKH, b.TrangThai,b.NgayLap, km.TenKM, b.ThanhToan "
-                + " from (select a.MaHDB, a.TenNV, kh.TenKH, a.TrangThai, a.NgayLap, a.MaKM, a.ThanhToan " 
-                + " from (select hdb.MaHDB, nv.TenNV, hdb.MaKH, hdb.TrangThai, hdb.NgayLap, hdb.MaKM, hdb.ThanhToan " 
-                + " from HoaDonBan as hdb left join NhanVien as nv on hdb.MaNV = nv.MaNV) as a left join " 
+                + " from (select a.MaHDB, a.TenNV, kh.TenKH, a.TrangThai, a.NgayLap, a.MaKM, a.ThanhToan "
+                + " from (select hdb.MaHDB, nv.TenNV, hdb.MaKH, hdb.TrangThai, hdb.NgayLap, hdb.MaKM, hdb.ThanhToan "
+                + " from HoaDonBan as hdb left join NhanVien as nv on hdb.MaNV = nv.MaNV) as a left join "
                 + " KhachHang as kh on a.MaKH =  kh.MaKH) as b left join KhuyenMai as km on b.MaKM = km.MaKM";
             DataTable dt = DataProvider.Instance.ExecuteQuery(query);
             return dt;
@@ -127,15 +127,15 @@ namespace QLST.Controls
         public static DataTable layThongTinHDB(int id)
         {
             string query = "select MaHDB, MaKH, MaNV, NgayLap, TrangThai, MaKM, ThanhToan from HoaDonBan where MaHDB = @id";
-            return DataProvider.Instance.ExecuteQuery(query, new object[] { id});
+            return DataProvider.Instance.ExecuteQuery(query, new object[] { id });
         }
         /////////////////////////////////
         public static int themChiTietHDB(int mahdb, int masp, int soluong, double gia)
         {
             string query = "exec themdsb @mahdb , @masp , @soluong , @gia";
-            return DataProvider.Instance.ExecuteNonQuery(query, new object[] { mahdb, masp, soluong , gia});
+            return DataProvider.Instance.ExecuteNonQuery(query, new object[] { mahdb, masp, soluong, gia });
         }
-        public static int suaChiTietHDB (int mahdb, int masp, int soluong, double gia)
+        public static int suaChiTietHDB(int mahdb, int masp, int soluong, double gia)
         {
             string query = "exec suadsb @mahdb , @masp , @soluong , @gia";
             return DataProvider.Instance.ExecuteNonQuery(query, new object[] { mahdb, masp, soluong, gia });
@@ -143,7 +143,7 @@ namespace QLST.Controls
         public static int xoaChiTietHDB(int mahdb)
         {
             string query = "exec xoadsb_all @ma";
-            return DataProvider.Instance.ExecuteNonQuery(query, new object[] { mahdb});
+            return DataProvider.Instance.ExecuteNonQuery(query, new object[] { mahdb });
         }
         public static int layMaHDBMoi()
         {
