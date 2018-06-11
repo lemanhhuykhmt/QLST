@@ -12,12 +12,12 @@ namespace QLST.Controls
     {
         public static string layTenNV(int id)
         {
-            if(id == 0)
+            if (id == 0)
             {
                 return "";
             }
             string query = "select TenNV from NhanVien where MaNV = @id";
-            return DataProvider.Instance.ExecuteScalar(query, new object[]{ id}).ToString();
+            return DataProvider.Instance.ExecuteScalar(query, new object[] { id }).ToString();
         }
         public static int themDuLieu(string ten, DateTime ngaysinh, string sdt, string gioitinh, double luong)
         {
