@@ -17,8 +17,8 @@ namespace QLST.Controls
         }
         public static DataTable layDanhSach() // lấy danh sách sản phẩm
         {
-            string query = "select sp.MaSP, sp.TenSP, loai.TenLoaiSP, sp.DonGia, " 
-                + "sp.DonViDo, sp.HSD, sp.NSX, sp.SoLuong from SanPham as sp left " 
+            string query = "select sp.MaSP, sp.TenSP, loai.TenLoaiSP, sp.DonGia, "
+                + "sp.DonViDo, sp.HSD, sp.NSX, sp.SoLuong from SanPham as sp left "
                 + "join LoaiSP as loai on sp.MaLoaiSP = loai.MaLoaiSP";
             DataTable dt = DataProvider.Instance.ExecuteQuery(query);
             return dt;
@@ -42,7 +42,7 @@ namespace QLST.Controls
         public static DataTable timKiem(object obj)
         {
             string str = "%" + obj.ToString() + "%";
-            string query = "select * from (select MaSP, TenSP, TenLoaiSP, DonGia, DonViDo, HSD, NSX, SoLuong from SanPham as sp, LoaiSP as loai where ConDung = 1 and sp.MaLoaiSP = loai.MaLoaiSP) as a" + 
+            string query = "select * from (select MaSP, TenSP, TenLoaiSP, DonGia, DonViDo, HSD, NSX, SoLuong from SanPham as sp, LoaiSP as loai where ConDung = 1 and sp.MaLoaiSP = loai.MaLoaiSP) as a" +
                 " where a.MaSP like @ma or a.TenSP like @ten or a.TenLoaiSP like @loai or a.DonViDo like @donvido";
             return DataProvider.Instance.ExecuteQuery(query, new object[] { str, str, str, str });
         }
@@ -54,13 +54,13 @@ namespace QLST.Controls
         public static int layIDLoaiSP(string ten)
         {
             string query = "select MaLoaiSP from LoaiSP where TenLoaiSP like @ten";
-            return (int) DataProvider.Instance.ExecuteScalar(query, new object[] { ten});
+            return (int)DataProvider.Instance.ExecuteScalar(query, new object[] { ten });
         }
         public static DataTable layDSSPTheoMH(int id)
         {
             string query = "select MaSP, TenSP, TenLoaiSP,DonGia, DonViDo, HSD, NSX, SoLuong from SanPham, LoaiSP, MatHang " +
                  "where ConDung = 1 and SanPham.MaLoaiSP = LoaiSP.MaLoaiSP and LoaiSP.MaMH = MatHang.MaMH and MatHang.MaMH = @id";
-            return DataProvider.Instance.ExecuteQuery(query, new object[] { id});
+            return DataProvider.Instance.ExecuteQuery(query, new object[] { id });
         }
     }
 }
