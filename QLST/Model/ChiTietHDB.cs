@@ -19,7 +19,7 @@ namespace QLST.Model
                 return listSanPham;
             }
         }
-        public ChiTietHDB ()
+        public ChiTietHDB()
         {
             listSanPham = new List<SanPham>();
         }
@@ -31,7 +31,7 @@ namespace QLST.Model
         {
             DataTable data = HoaDonBanControl.layDanhSachSP(id);
             listSanPham = new List<SanPham>();
-            for(int i = 0; i < data.Rows.Count; ++i)
+            for (int i = 0; i < data.Rows.Count; ++i)
             {
                 SanPham sanPham = new SanPham(data.Rows[i]);
                 listSanPham.Add(sanPham);
@@ -40,7 +40,7 @@ namespace QLST.Model
         public void ThemSP(int id)
         {
             int vitri = isContain(id);
-            if(vitri != -1) // nếu đã có sản phẩm trong list
+            if (vitri != -1) // nếu đã có sản phẩm trong list
             {
                 listSanPham[vitri].SoLuong++;
                 return;
@@ -53,16 +53,16 @@ namespace QLST.Model
         public void xoaSP(int id)
         {
             int vitri = isContain(id);
-            if(vitri != -1)
+            if (vitri != -1)
             {
                 listSanPham.RemoveAt(vitri);
             }
         }
         public int isContain(int id)// kiểm tra danh sách có mã id chưa, nếu đúng trả về vị trị của nó trong list
         {
-            for(int i = 0; i < listSanPham.Count; ++i)
+            for (int i = 0; i < listSanPham.Count; ++i)
             {
-                if(id == listSanPham[i].IdSP)
+                if (id == listSanPham[i].IdSP)
                 {
                     return i;
                 }
@@ -72,7 +72,7 @@ namespace QLST.Model
         public float tinhTongTien()
         {
             float tongTien = 0;
-            for(int i = 0; i < listSanPham.Count; ++i)
+            for (int i = 0; i < listSanPham.Count; ++i)
             {
                 tongTien += (listSanPham[i].SoLuong * listSanPham[i].DonGia);
             }
