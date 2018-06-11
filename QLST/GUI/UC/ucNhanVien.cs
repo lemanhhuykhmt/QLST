@@ -1,58 +1,118 @@
-﻿using QLST.ExtendModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using QLST.Controls;
+using QLST.GUI.Sua;
+using QLST.GUI.NhapLieu;
 
-namespace QLST.Controls
+namespace QLST.GUI.UC
 {
-    public class NhanVienControl
+    public partial class ucNhanVien : UserControl
     {
-        public static string layTenNV(int id)
+        public ucNhanVien()
         {
-            if (id == 0)
+            InitializeComponent();
+            loadDuLieu();
+        }
+        private void loadDuLieu()
+        {
+            dgvDanhSach.Rows.Clear();
+            DataTable dt = NhanVienControl.layDanhSach();
+            for (int i = 0; i < dt.Rows.Count; ++i)
             {
-                return "";
+                string date = String.Format("{0:dd/MM/yyyy}", dt.Rows[i][4]);
+                dgvDanhSach.Rows.Add(new object[] { false, dt.Rows[i][0], dt.Rows[i][1], date, dt.Rows[i][2], dt.Rows[i][3], dt.Rows[i][5] });
+
             }
-            string query = "select TenNV from NhanVien where MaNV = @id";
-            return DataProvider.Instance.ExecuteScalar(query, new object[] { id }).ToString();
         }
-        public static int themDuLieu(string ten, DateTime ngaysinh, string sdt, string gioitinh, double luong)
+        private void btnXoa_Click(object sender, EventArgs e)
         {
-            string query = "exec themgv @ten , @ngaysinh , @sdt , @gioitinh , @luong";
-            if (luong == 0) return DataProvider.Instance.ExecuteNonQuery(query, new object[] { ten, ngaysinh, sdt, gioitinh, null });
-            return DataProvider.Instance.ExecuteNonQuery(query, new object[] { ten, ngaysinh, sdt, gioitinh, luong });
+            int ketQua = 0;
+            for (int i = 0; i < dgvDanhSach.Rows.Count - 1; ++i)
+            {
+                if (Convert.ToBoolean(dgvDanhSach.Rows[i].Cells["colCheck"].Value.ToString()))
+                {
+                    ketQua += NhanVienControl.xoaThongTin(Convert.ToInt32(dgvDanhSach.Rows[i].Cells["colMa"].Value.ToString()));
+                }
+            }
+            if (ketQua > 0)
+            {
+                MessageBox.Show("xóa thành công " + ketQua);
+                loadDuLieu();
+            }
+            else
+            {
+                MessageBox.Show("xóa thất bại");
+            }
         }
-        public static DataTable layDanhSach() // lấy thông tin khách hàng có id là ..
+        private void btnTimKiem_Click(object sender, EventArgs e)
         {
-            string query = "select * from NhanVien";//lấy ra thông tin khách hàng có mã
-            DataTable dt = DataProvider.Instance.ExecuteQuery(query);
-            return dt;
+            timKiem();
         }
-        public static DataTable layThongTin(int id) // lấy thông tin khách hàng có id là ..
+        private void timKiem()
         {
-            string query = "select * from NhanVien where MaNV = @ma";//lấy ra thông tin khách hàng có mã
-            DataTable dt = DataProvider.Instance.ExecuteQuery(query, new object[] { id });
-            return dt;
+            // get text
+            string value = txtTimKiem.Text;
+            if (value.Length == 0)
+            {
+                loadDuLieu();
+                return;
+            }
+            dgvDanhSach.Rows.Clear();
+            DataTable dt = NhanVienControl.timKiem(value);
+            for (int i = 0; i < dt.Rows.Count; ++i)
+            {
+                string date = String.Format("{0:dd/MM/yyyy}", dt.Rows[i][4]);
+                dgvDanhSach.Rows.Add(new object[] { false, dt.Rows[i][0], dt.Rows[i][1], date, dt.Rows[i][2], dt.Rows[i][3], dt.Rows[i][5] });
+
+            }
         }
-        public static int suaThongTin(int id, string ten, string gioitinh, string ngaysinh, string sdt, double luong) // sửa thông tin của khách hàng
+        private void dgvDanhSach_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            string query = "exec suanv @id , @ten , @gioitinh , @ngaysinh , @sdt  , @luong";
-            if (luong == 0) return DataProvider.Instance.ExecuteNonQuery(query, new object[] { id, ten, gioitinh, ngaysinh, sdt, "" });
-            return DataProvider.Instance.ExecuteNonQuery(query, new object[] { id, ten, gioitinh, ngaysinh, sdt, luong });
+            if (dgvDanhSach.Rows.Count == e.RowIndex + 1) return;
+            int id = Convert.ToInt32(dgvDanhSach.Rows[e.RowIndex].Cells["colMa"].Value.ToString());
+            if (e.ColumnIndex == dgvDanhSach.Columns["colSua"].Index)
+            {
+                frmSuaNV f = new frmSuaNV(id);
+                f.ShowDialog();
+                loadDuLieu();
+            }
+            else if (e.ColumnIndex == dgvDanhSach.Columns["colXoa"].Index)
+            {
+                int ketQua = NhanVienControl.xoaThongTin(id);
+                if (ketQua <= 0)
+                {
+                    MessageBox.Show("Thực hiện thất bại");
+                }
+                else
+                {
+                    loadDuLieu();
+                }
+            }
         }
-        public static int xoaThongTin(int id)
+
+        private void txtTimKiem_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
-            string query = "exec xoanv @ma";
-            return DataProvider.Instance.ExecuteNonQuery(query, new object[] { id });
+            if (e.KeyValue == 13)
+            {
+                timKiem();
+            }
+            else if (e.KeyValue == 27)
+            {
+                txtTimKiem.Text = "";
+            }
         }
-        public static DataTable timKiem(object obj)
+        private void btnThem_Click(object sender, EventArgs e)
         {
-            string str = "%" + obj.ToString() + "%";
-            string query = "select * from NhanVien where TenNV like @ten or SDT like @sdt";
-            return DataProvider.Instance.ExecuteQuery(query, new object[] { str, str });
+            frmThemNV f = new frmThemNV();
+            f.ShowDialog();
+            loadDuLieu();
         }
     }
 }
